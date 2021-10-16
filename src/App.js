@@ -1,24 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import './css/App.css';
+import React from 'react';
+//add-ons
+import { useMediaQuery } from 'react-responsive'
+//components
+import MainSectionComponent from './main-body-section-component/MainSectionComponent';
 
 function App() {
+  //Medi Query responsive
+  const isBigScreen = useMediaQuery({ query: '(min-width: 1824px)' });
+  const isDesktopOrLaptop = useMediaQuery({query: '(min-width: 1224px)'});
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' });
+  const isPortrait = useMediaQuery({ query: '(orientation: portrait)' });
+  const isRetina = useMediaQuery({ query: '(min-resolution: 2dppx)' });
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.Fragment>
+      <MainSectionComponent props={[isTabletOrMobile, isPortrait]}/>
+    </React.Fragment>
   );
 }
 
