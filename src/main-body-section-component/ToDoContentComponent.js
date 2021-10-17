@@ -62,7 +62,10 @@ export default function ToDoContentComponent()
     const [isEdicion, setIsEdicion] = useState(-1);//Para abrir y cerrar la ventana de edicione el
     function ActualizarToDo(valor)
     {
-        setIsEdicion(valor);  
+        if(isEdicion === -1)
+            setIsEdicion(valor);
+        else
+            setIsEdicion(-1);
     }
 
     function AceptToDoEdit(valor)//El boton Aceptar llmara esta funcion al editar un ToDo
@@ -114,21 +117,15 @@ export default function ToDoContentComponent()
 
     function GeneCatFacts()
     {
-        console.log("Frases max "+ValorNumFrases.current.value);
-        let maxNumFrases = ValorNumFrases.current.value;
-        if(maxNumFrases <= 5)
-        {
-            for (let index = 0; index < maxNumFrases; index++) {
-                setIdItems(IdItems+1)
-                const AddItem = {
-                iditemlist: IdItems,
-                itema:  catfact.fact,
-                completa: false
-                }
-                //Agregamos nuevos items a la lista
-                setReAddToDo([...reAddToDo, AddItem]);
-            }
-        }  
+        setNumFact(numFact-1);
+        setIdItems(IdItems+1)
+        const AddItem = {
+        iditemlist: IdItems,
+        itema:  catfact.fact,
+        completa: false
+        }
+        //Agregamos nuevos items a la lista
+        setReAddToDo([...reAddToDo, AddItem]);
     }
 
     //Creamos la lista de todos
@@ -206,12 +203,29 @@ export default function ToDoContentComponent()
             </motion.div>
     );
     //Div para crear frases aleatorias de la API
-    const CatFactsDiv =(
-        <div className="main-cat-div">
-            <input ref={ValorNumFrases} placeholder="Agrega una cantidad" type="text" id="number-cat-facts" pattern="[0-9]*"/>
-            <button id="cat-fact-button" placeholder="Frase de gatos" onClick={GeneCatFacts}>Hechos Felinos</button>
-        </div>
-    );
+    const [numFact, setNumFact] = useState();
+    function ChanNumFact(valor)
+    {
+        setNumFact(valor.target.value);
+    }
+    function ButFacts()
+    {
+        let ArrayButton = []
+        for (let index = 0; index < numFact; index++) {
+            ArrayButton[index]=(
+                <button key={index} id="cat-fact-button" placeholder="Frase de gatos" onClick={GeneCatFacts}>Hechos Felinos</button> 
+                );   
+            }
+        return ArrayButton;
+    }
+    const CatFactsDiv = (
+            <div className="main-cat-div">
+                <h4>Hechos Felinos</h4>
+                <input ref={ValorNumFrases} placeholder="Que cantidad de hechos felinos quieres agregar ?" 
+                type="text" id="number-cat-facts" onChange={ChanNumFact}/>
+                {ButFacts()}
+            </div>
+        );
     return(
         <React.Fragment>
             <div className="cont-inputs">
@@ -219,7 +233,7 @@ export default function ToDoContentComponent()
                 <button id="my-button" placeholder="Agregar" onClick={FunAddToDo}>Agregar</button>
                 <button id="my-button-buscar" placeholder="Buscar" onClick={FilToDo}>{textBuscar}</button>
             </div>
-
+            
             {CatFactsDiv}
 
             <div className="list-to-do-cont">
